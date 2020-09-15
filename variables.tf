@@ -1,11 +1,19 @@
 variable "project" {
   description = "Project ID"
-  default     = "codecomp3-<team-name>"
+  default     = "codecomp3-gcp-terraform"
+}
+
+variable "bucket" {
+  description = "Name of bucket used for storing terraform state"
+  default     = "codecomp3-farbcry"
 }
 
 variable "region" {
   default = "us-central1"
+}
 
+variable "appengineLocation" {
+  default = "us-central"
 }
 
 variable "zone" {
@@ -27,5 +35,6 @@ variable "service_list" {
     "appengine.googleapis.com",
     "storage-api.googleapis.com",
     "cloudbuild.googleapis.com",
+	"containerregistry.googleapis.com",
   ]
 }
