@@ -12,7 +12,7 @@ variable "zone" {
   default = "us-central1-f"
 }
 
-variable "credentials_file_path" {
+variable "credentials" {
   default = "service-account.json"
 }
 
