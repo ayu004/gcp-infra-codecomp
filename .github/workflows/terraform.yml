@@ -8,7 +8,6 @@ on:
 jobs:
   terraform:
     name: 'Terraform'
-    needs: 'create-gcp-bucket'
     runs-on: ubuntu-latest
 
     steps:
