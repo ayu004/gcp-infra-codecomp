@@ -43,7 +43,7 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init -backend-config="address=demo.consul.io" -backend-config="bucket=codecomp3-farbcry" -backend-config="credentials=${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}"
+      run: terraform init -backend-config="credentials=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}"
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
