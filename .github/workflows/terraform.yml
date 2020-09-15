@@ -24,7 +24,7 @@ jobs:
     
     - name: 'Create-bucket-for-tf-state'
       run: |-
-        gsutil mb gs://codecomp3-farbcry
+        gsutil mb gs://codecomp3-farbcry || echo "Bucket Already Exists"
   terraform:
     name: 'Terraform'
     needs: 'create-gcp-bucket'
