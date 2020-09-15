@@ -1,6 +1,8 @@
 terraform {
   required_version = ">=0.12.13"
-  backend "gcs" {}
+  backend "gcs" {
+	bucket = "codecomp3-farbcry"
+  }
 }
 
 # Download any stable version in AWS provider of 2.36.0 or higher in 2.36 train
