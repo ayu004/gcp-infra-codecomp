@@ -2,6 +2,7 @@ terraform {
   required_version = ">=0.12.13"
   backend "gcs" {
 	bucket = "codecomp3-farbcry"
+	credentials = ${{ TF_CREDS }}
   }
 }
 
