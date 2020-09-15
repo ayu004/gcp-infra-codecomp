@@ -13,7 +13,7 @@ variable "zone" {
 }
 
 variable "credentials" {
-  default = "service-account.json"
+  type = string
 }
 
 variable "service_list" {
