@@ -23,7 +23,7 @@ jobs:
 
       # Create the GCP Bucket to store terraform state
       - name: GCP-Bucket
-        run: |
+        run: |-
           gsutil mb gs://codecomp3-<team-name>
   terraform:
     name: 'Terraform'
