@@ -1,3 +1,20 @@
+terraform {
+  required_version = ">=0.12.13"
+  #backend "s3" {
+  #  bucket         = "kyler-github-actions-demo-terraform-tfstate"
+  #  key            = "terraform.tfstate"
+  #  region         = "us-east-1"
+  #  dynamodb_table = "aws-locks"
+  #  encrypt        = true
+  #}
+}
+
+# Download any stable version in AWS provider of 2.36.0 or higher in 2.36 train
+provider "google" {
+  project = "gcp-terraform-289514"
+  region  = "us-west1"
+}
+
 resource "google_compute_instance" "vm_instance" {
   name         = "terraform-instance"
   machine_type = "f1-micro"
