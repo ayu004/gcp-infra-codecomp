@@ -46,7 +46,6 @@
 
 5. When this Action gets completed you have the infrastructure ready to deploy your codecomp3 bot on.
 
-## Happy Coding :smile:  
-
+## Please  follow the remaining steps on this [repo](https://github.com/ayu004/codecomp3.gcp.java) to deploy codecomp3 bot on infrastructure you just created
 
 
