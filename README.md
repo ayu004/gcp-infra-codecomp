@@ -37,11 +37,11 @@
   - In your forked repository, Visit .github/workflows/terraform.yml
   - Edit this file online by clicking on pencil icon on top right.
   - Replace your actual codecomp3 team name with <team-name> on line 27 and line 46 as shown in figure below with yellow highligher
-  ![Editing github workflow](/assets/terraformYMLfile.PNG)
+  ![Editing github workflow](/assets/terraformYMLfile.png)
 
   - Click on Start Commit and then Commit Changes
   - On commiting changes, you can see the Git Action running in Actions tab. Wait for this to complete as shown below:
-  ![Github Action](/assets/github-action.PNG)
+  ![Github Action](/assets/github-action.png)
 
 
 5. When this Action gets completed you have the infrastructure ready to deploy your codecomp3 bot on.
