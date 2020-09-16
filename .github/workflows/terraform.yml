@@ -43,7 +43,7 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init -backend-config='credentials=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' -backend-config='bucket=codecomp3-<team-name>'
+      run: terraform init -backend-config='credentials=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' -backend-config='bucket=codecomp3-<team-name>-bucket'
         
     # Generates an execution plan for Terraform
     - name: Terraform Plan
