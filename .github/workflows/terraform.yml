@@ -24,7 +24,7 @@ jobs:
     
     - name: 'Create-bucket-for-tf-state'
       run: |-
-        gsutil mb gs://codecomp3-farbcry || echo "Bucket Already Exists"
+        gsutil mb gs://codecomp3-${{ secrets.PROJECT_ID }} || echo "Bucket Already Exists"
   terraform:
     name: 'Terraform'
     needs: 'create-gcp-bucket'
@@ -43,7 +43,7 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init -backend-config='credentials=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}'
+      run: terraform init -backend-config='credentials=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' -backend-config='bucket=codecomp3-${{ secrets.PROJECT_ID }}'
         
     # Generates an execution plan for Terraform
     - name: Terraform Plan
