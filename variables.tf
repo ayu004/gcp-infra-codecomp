@@ -1,11 +1,11 @@
 variable "project" {
   description = "Project ID"
-  default     = "codecomp3-gcp-terraform"
+  type = string
 }
 
 variable "bucket" {
   description = "Name of bucket used for storing terraform state"
-  default     = "codecomp3-farbcry"
+  type = string
 }
 
 variable "region" {
