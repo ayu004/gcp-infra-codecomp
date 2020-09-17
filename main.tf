@@ -18,7 +18,6 @@ resource "google_project_service" "enableServices" {
 }
 
 resource "google_app_engine_application" "app" {
-  project = var.project
   depends_on = [google_project_service.enableServices]
   location_id = var.appengineLocation
 }
