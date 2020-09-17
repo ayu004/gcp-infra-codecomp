@@ -6,7 +6,7 @@ on:
       - master
 
 env:
-  PROJECT_ID: ${{ secrets.PROJECT_ID }}
+  GCP_PROJECT: ${{ secrets.PROJECT_ID }}
 
 jobs:
   create-gcp-bucket:
@@ -27,7 +27,7 @@ jobs:
     
     - name: 'Create-bucket-for-tf-state'
       run: |-
-        gsutil mb gs://codecomp3ongcp-thewinners-bucket || echo "Bucket Already Exists"
+        gsutil mb gs://codecomp3ongcp-thenewwinners-bucket || echo "Bucket Already Exists"
 
   terraform:
     name: 'Terraform'
@@ -47,14 +47,14 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init -backend-config='credentials=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' -backend-config='bucket=codecomp3ongcp-thewinners-bucket'
+      run: terraform init -backend-config='credentials=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' -backend-config='bucket=codecomp3ongcp-thenewwinners-bucket'
 
         
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan -var 'credentials=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' -var 'project=${PROJECT_ID}'
+      run: terraform plan -var 'credentials=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' -var 'project=${GCP_PROJECT}'
 
       # On push to master, build or change infrastructure according to Terraform configuration files
       # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Apply
-      run: terraform apply -var 'credentials=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' -var 'project=${PROJECT_ID}' -auto-approve
+      run: terraform apply -var 'credentials=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' -var 'project=${GCP_PROJECT}' -auto-approve
