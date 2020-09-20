@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - github-action-changes
 
 env:
   GCP_PROJECT: ${{ secrets.PROJECT_ID }}
