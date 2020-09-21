@@ -4,9 +4,13 @@ on:
   push:
     branches:
       - master
-
+      - dev
+  pull_request:
+    branches:
+      - '*'
 env:
   GCP_PROJECT: ${{ secrets.PROJECT_ID }}
+  BUCKET_NAME: 'codecomp3ongcp-${{ secrets.PROJECT_ID }}'
 
 jobs:
   create-gcp-bucket:
@@ -25,10 +29,10 @@ jobs:
         project_id: ${{ secrets.PROJECT_ID }}
         export_default_credentials: true 
     
-    - name: 'Create-bucket-for-tf-state'
+    - name: 'Create Bucket & Enable Object Versioning'
       run: |-
-        gsutil mb gs://codecomp3ongcp-tothewinners-bucket || echo "Bucket Already Exists"
-
+        gsutil mb gs://$BUCKET_NAME || echo "Bucket Already Exists"
+        gsutil versioning set on gs://$BUCKET_NAME || echo "Versioning Already Enabled"
   terraform:
     name: 'Terraform'
     needs: 'create-gcp-bucket'
@@ -47,14 +51,41 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init -backend-config='credentials=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' -backend-config='bucket=codecomp3ongcp-tothewinners-bucket'
-
+      run: |-  
+        declare -A branch_map=( ["master"]="prod" ["dev"]="int")
+        branch_name="${GITHUB_REF##*/}"
+        if [ -v branch_map[${branch_name}] ];then
+          branch_dir="${branch_map[${branch_name}]}"
+        else
+          echo "Branch ${branch_name} doesn't exist in map. Initializing with Int Module"
+          branch_dir="int"
+        fi
+        cd env/${branch_dir}
+        terraform init -backend-config='credentials=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' -backend-config "bucket=$BUCKET_NAME"
         
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan -var 'credentials=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' -var 'project=codecomp-permissions'
-
+      run: |-
+        declare -A branch_map=( ["master"]="prod" ["dev"]="int")
+        branch_name="${GITHUB_REF##*/}"
+        if [ -v branch_map[${branch_name}] ];then
+          branch_dir="${branch_map[${branch_name}]}"
+        else
+          echo "Branch ${branch_name} doesn't exist in map. Initializing with Int Module"
+          branch_dir="int"
+        fi
+        cd env/${branch_dir}
+        terraform plan -var 'credentials=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' -var "project=$GCP_PROJECT"
       # On push to master, build or change infrastructure according to Terraform configuration files
       # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Apply
-      run: terraform apply -var 'credentials=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' -var 'project=codecomp-permissions' -auto-approve
+      run: |-
+        declare -A branch_map=( ["master"]="prod" ["dev"]="int")
+        branch_name="${GITHUB_REF##*/}"
+        if [ -v branch_map[${branch_name}] ];then
+          branch_dir="${branch_map[${branch_name}]}"
+          cd env/${branch_dir}
+          terraform apply -var 'credentials=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' -var "project=$GCP_PROJECT" -auto-approve
+        else
+          echo "Branch ${branch_name} doesn't exist in map, not running apply"
+        fi
